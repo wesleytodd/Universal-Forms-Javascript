@@ -4,31 +4,41 @@
 	<meta charset="utf-8">
 	<title>Universal Forms Examples | Javascript | Contact Form</title>
 	<meta name="author" content="Wes Todd">
-	<link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
 	<h1>Universal Forms Example: Contact Form</h1>
 
-	<div id="contact-form"></div>
+	<form id="contactForm" action="/contact" method="POST">
+		<label for="fname">First Name:</label>
+		<input name="fname" type="text" />
+		<label for="lname">Last Name:</label>
+		<input name="lname" type="text" />
+		<label for="email">Email:</label>
+		<input name="email" type="email" />
+		<label for="regarding">Regarding:</label>
+		<select name="regarding">
+			<option value="General">General</option>
+			<option value="What Up?">What Up?</option>
+			<option value="Other">Other</option>
+		</select>
+		<label for="subject">Subject:</label>
+		<input name="subject" type="text" />
+		<label for="message">Message:</label>
+		<textarea name="message"></textarea>
+		<input type="submit" value="Contact Us!!" />
+	</form>
 
-	<script src="../lib/jquery-1.9.0.min.js"></script>
-	<script src="../lib/jquery-templates/src/jquery.templates.js"></script>
-	<script src="../lib/jquery-validation/jquery.validate.js"></script>
+	<script src="../../lib/jquery.js"></script>
+	<script src="../../lib/jquery-validate.js"></script>
 	<script src="../../../../core/field.js"></script>
 	<script src="../../../../core/form.js"></script>
-	<script src="../renderer.js"></script>
-	<script src="../validator.js"></script>
+	<script src="../../src/universal-forms-jquery.js"></script>
 	<script>
+		var formDef = '{ "id" : "contactForm", "action" : "/contact", "fields" : [ { "name" : "fname", "type" : "text", "label" : "First Name" }, { "name" : "lname", "type" : "text", "label" : "Last Name" }, { "name" : "email", "type" : "email", "label" : "Email", "rules" : [ "required", "email" ] }, { "name" : "regarding", "type" : "select", "label" : "Regarding", "value" : "What Up?", "options" : { "General" : "General", "What Up?" : "What Up?", "Other" : "Other" } }, { "name" : "subject", "type" : "text", "label" : "Subject", "rules" : [ "required" ] }, { "name" : "message", "type" : "textarea", "label" : "Message", "rules" : [ "required", "length[25,]" ] } ] }';
 		jQuery(document).ready(function($){
-			var res = $.ajax({
-				dataType : 'json',
-				url : 'contact/form.json'
-			}).success(function(data) {
-				var form = UniversalForms.Form(data);
-				form.render('#contact-form');
-				form.validate();
-			});
+			var form = UniversalForms.Form($.parseJSON(formDef));
+			form.validate();
 		});
 	</script>
 </body>

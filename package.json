@@ -1,32 +1,28 @@
 {
   "name": "Universal-Forms",
   "version": "0.0.0",
-  "description": "A javascript inplementation of the Universal Forms pattern",
-  "main": "lib/index.js",
+  "description": "A javascript inplementation of the Universal Forms standard",
+  "main": "",
   "directories": {
-    "example": "examples",
     "test": "test"
   },
   "scripts": {
-    "test": "grunt mocha"
+    "test": ""
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/wesleytodd/Universal-Forms"
+    "url": "https://github.com/wesleytodd/Universal-Forms-Javascript"
   },
   "author": "Wes Todd",
   "license": "BSD",
   "devDependencies": {
-    "grunt": "~0.3.17",
-    "node-static": "~0.6.6",
-    "grunt-mocha": "~0.1.7",
-    "mocha": "~1.7.4",
-    "expect": "0.0.2",
-    "expect.js": "~0.2.0",
-    "grunt-simple-mocha": "~0.3.1",
-    "should": "~1.2.1"
+    "grunt-regarde": "~0.1.1",
+    "grunt-contrib-uglify": "~0.2.0",
+    "grunt": "~0.4.1",
+    "grunt-contrib-jshint": "~0.4.1",
+    "grunt-contrib-concat": "~0.2.0"
   },
-  "dependencies": {
-    "underscore": "~1.4.3"
+  "jam": {
+    "main": "build/universal-forms.min.js"
   }
 }
