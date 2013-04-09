@@ -23,6 +23,6 @@
     "grunt-contrib-concat": "~0.2.0"
   },
   "jam": {
-    "main": "build/universal-forms.min.js"
+    "main": "build/universal-forms-require.js"
   }
 }

@@ -1,1 +1,1 @@
-var UniversalForms = (function() {
+(function() {

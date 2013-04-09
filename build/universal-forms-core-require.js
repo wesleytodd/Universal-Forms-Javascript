@@ -1,4 +1,4 @@
-(function() {
+define(function() {
 
 /*
  * Universal Forms: Field
@@ -228,14 +228,9 @@ Form.trigger = function(ctx, evt) {
 	/**
 	 * Export
 	 */
-	if (typeof exports !== 'undefined') {
-		exports.Field = Field;
-		exports.Form = Form;
-	} else {
-		window.UniversalForms = {
-			Field : Field,
-			Form : Form
-		};
-	}
+	return {
+		Form : Form,
+		Field : Field
+	};
 
-})();
+});

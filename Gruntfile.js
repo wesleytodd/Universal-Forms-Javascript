@@ -14,8 +14,10 @@ module.exports = function(grunt) {
 
 		concat : {
 			core : {
-				src : ['core/prefix.js', 'core/field.js', 'core/form.js', 'core/suffix.js'],
-				dest : 'build/universal-forms-core.js'
+				files : {
+					'build/universal-forms-core.js' : ['core/prefix.js', 'core/field.js', 'core/form.js', 'core/suffix.js'],
+					'build/universal-forms-core-require.js' : ['core/prefix-require.js', 'core/field.js', 'core/form.js', 'core/suffix-require.js']
+				}
 			},
 			drivers : {
 				files : formatDriversConcat()
@@ -25,7 +27,8 @@ module.exports = function(grunt) {
 		uglify : {
 			core : {
 				files : {
-					'build/universal-forms-core.min.js' : 'build/universal-forms-core.js'
+					'build/universal-forms-core.min.js' : 'build/universal-forms-core.js',
+					'build/universal-forms-core-require.min.js' : 'build/universal-forms-core-require.js'
 				}
 			},
 			drivers : {
@@ -71,12 +74,48 @@ var formatDriversConcat = function() {
 	var out = {},
 		drivers = getDrivers();
 	for (var d in drivers) {
+		var driverBase = path.join('drivers', drivers[d]);
+
+		// Standard version
 		var outputFile = path.join('build', 'drivers', 'universal-forms-' + drivers[d] + '.js');
 		out[outputFile] = getDriverFiles(drivers[d]);
 		out[outputFile].unshift('core/form.js');
 		out[outputFile].unshift('core/field.js');
-		out[outputFile].unshift('core/prefix.js');
-		out[outputFile].push('core/suffix.js');
+
+		var driverPrefix = path.join(driverBase, 'prefix.js');
+		if (fs.existsSync(driverPrefix)) {
+			out[outputFile].unshift(driverPrefix);
+		} else {
+			out[outputFile].unshift('core/prefix.js');
+		}
+
+		var driverSuffix = path.join(driverBase, 'suffix.js');
+		if (fs.existsSync(driverSuffix)) {
+			out[outputFile].push(driverSuffix);
+		} else {
+			out[outputFile].push('core/suffix.js');
+		}
+
+		// Require version
+		outputFile = path.join('build', 'drivers', 'universal-forms-' + drivers[d] + '-require.js');
+		out[outputFile] = getDriverFiles(drivers[d]);
+		out[outputFile].unshift('core/form.js');
+		out[outputFile].unshift('core/field.js');
+
+		var driverPrefix = path.join(driverBase, 'prefix-require.js');
+		if (fs.existsSync(driverPrefix)) {
+			out[outputFile].unshift(driverPrefix);
+		} else {
+			out[outputFile].unshift('core/prefix-require.js');
+		}
+
+		var driverSuffix = path.join(driverBase, 'suffix-require.js');
+		if (fs.existsSync(driverSuffix)) {
+			out[outputFile].push(driverSuffix);
+		} else {
+			out[outputFile].push('core/suffix-require.js');
+		}
+
 	}
 	return out;
 };
@@ -86,6 +125,7 @@ var formatDriversUglify = function() {
 		drivers = getDrivers();
 	for (var d in drivers) {
 		out[path.join('build', 'drivers', 'universal-forms-' + drivers[d] + '.min.js')] = path.join('build', 'drivers', 'universal-forms-' + drivers[d] + '.js');
+		out[path.join('build', 'drivers', 'universal-forms-' + drivers[d] + '-require.min.js')] = path.join('build', 'drivers', 'universal-forms-' + drivers[d] + '-require.js');
 	}
 	return out;
 };
@@ -119,12 +159,15 @@ var getDrivers = function() {
 var driverFiles = {};
 var getDriverFiles = function(driver) {
 	if (typeof driverFiles[driver] === 'undefined') {
-		var driverPath = path.join('drivers', driver, 'src');
+		var driverPath = path.join('drivers', driver);
 		var files = fs.readdirSync(driverPath);
+		var output = [];
 		for (var f in files) {
-			files[f] = path.join(driverPath, files[f]);
+			if (files[f].indexOf('universal-forms') === 0) {
+				output.push(path.join(driverPath, files[f]));
+			}
 		}
-		driverFiles[driver] = files;
+		driverFiles[driver] = output;
 	}
 	return driverFiles[driver];
 };
