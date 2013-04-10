@@ -1,1 +1,1 @@
-define(['jquery', 'jquery-validation'], function($) {
+define(['jquery', 'jquery-validation-fork'], function($) {
